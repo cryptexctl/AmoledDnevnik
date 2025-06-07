@@ -52,7 +52,7 @@ void AmoledDnevnikSetColor(UIColor *color) {
 - (void)didMoveToWindow {
     %orig;
     NSNumber *tag = self.reactTag;
-    if (tag && [tag integerValue] == 1037) {
+    if (tag && [tag integerValue] == 1023) {
         self.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(amoleddnevnik_secretTap)];
         tap.numberOfTapsRequired = 1;
