@@ -21,12 +21,14 @@ jobs:
           echo "THEOS=$HOME/theos" >> $GITHUB_ENV
 
       - name: Build packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p packages
           THEOS_PACKAGE_SCHEME=rootless gmake clean package FINALPACKAGE=1 -j8
           mv packages/*.deb packages/AmoledDnevnik.rootless.deb
           rm -rf $HOME/theos
-          bash -c "$(curl -fsSL https://raw.githubusercontent.com/roothide/theos/master/bin/install-theos)"
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/roothide/theos/master/bin/install-theos)" -H "Authorization: token $GITHUB_TOKEN"
           THEOS_PACKAGE_SCHEME=roothide gmake clean package FINALPACKAGE=1 -j8
           mv packages/*.deb packages/AmoledDnevnik.roothide.deb
           rm -rf $HOME/theos
