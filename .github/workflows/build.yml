@@ -26,15 +26,15 @@ jobs:
         run: |
           mkdir -p packages
           THEOS_PACKAGE_SCHEME=rootless gmake clean package FINALPACKAGE=1 -j8
-          mv packages/*.deb packages/AmoledDnevnik.rootless.deb
+          mv packages/com.lain.amoleddnevnik_*_iphoneos-arm64e.deb packages/AmoledDnevnik.rootless.deb
           rm -rf $HOME/theos
           bash -c "$(curl -fsSL https://raw.githubusercontent.com/roothide/theos/master/bin/install-theos)" -H "Authorization: token $GITHUB_TOKEN"
           THEOS_PACKAGE_SCHEME=roothide gmake clean package FINALPACKAGE=1 -j8
-          mv packages/*.deb packages/AmoledDnevnik.roothide.deb
+          mv packages/com.lain.amoleddnevnik_*_iphoneos-arm64e.deb packages/AmoledDnevnik.roothide.deb
           rm -rf $HOME/theos
           git clone --recursive https://github.com/theos/theos.git $HOME/theos
           gmake clean package FINALPACKAGE=1 -j8
-          mv packages/*.deb packages/AmoledDnevnik.rootful.deb
+          mv packages/com.lain.amoleddnevnik_*_iphoneos-arm64e.deb packages/AmoledDnevnik.rootful.deb
           cd packages && zip AmoledDnevnik.zip *.deb
 
       - name: Upload packages
