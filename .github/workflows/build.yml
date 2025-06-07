@@ -20,12 +20,23 @@ jobs:
           git clone --recursive https://github.com/theos/theos.git $HOME/theos
           echo "THEOS=$HOME/theos" >> $GITHUB_ENV
 
-      - name: Build .deb package
+      - name: Build packages
         run: |
-          make clean package FINALPACKAGE=1
+          mkdir -p packages
+          THEOS_PACKAGE_SCHEME=rootless gmake clean package FINALPACKAGE=1 -j8
+          mv packages/*.deb packages/AmoledDnevnik.rootless.deb
+          rm -rf $HOME/theos
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/roothide/theos/master/bin/install-theos)"
+          THEOS_PACKAGE_SCHEME=roothide gmake clean package FINALPACKAGE=1 -j8
+          mv packages/*.deb packages/AmoledDnevnik.roothide.deb
+          rm -rf $HOME/theos
+          git clone --recursive https://github.com/theos/theos.git $HOME/theos
+          gmake clean package FINALPACKAGE=1 -j8
+          mv packages/*.deb packages/AmoledDnevnik.rootful.deb
+          cd packages && zip AmoledDnevnik.zip *.deb
 
-      - name: Upload .deb to GitHub Artifacts
+      - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
-          name: AmoledDnevnik.deb
-          path: ./packages/*.deb
+          name: AmoledDnevnik
+          path: ./packages/AmoledDnevnik.zip
